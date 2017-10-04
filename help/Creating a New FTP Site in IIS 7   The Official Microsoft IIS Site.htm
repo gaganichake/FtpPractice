@@ -1,0 +1,256 @@
+
+ 
+<!DOCTYPE HTML>
+<!--[if IE 7]><html class="ie7" lang="en"><![endif]-->
+<!--[if IE 8]><html class="ie8" lang="en"><![endif]-->
+<!--[if gt IE 8]><!--><html lang="en"><!--<![endif]-->
+  <head>
+  <meta charset="UTF-8">
+  <title>Creating a New FTP Site in IIS 7 : The Official Microsoft IIS Site</title>
+    <!--[if IE]><script src='http://i1.iis.net/umbraco-beta-scripts/html5.js?cdn_id=2014-01-17-002'></script><![endif]-->  
+    
+<meta name="keywords" content="FTP" />
+<meta name="description" content="Version Notes IIS 7.5 The FTP 7.5 service ships as a feature for IIS 7.5 in Windows 7 and Windows Server 2008 R2. IIS 7.0 The FTP 7.0 and FTP 7.5 services were shipped out-of-band for IIS 7.0, whic..." />
+        
+    <link rel="shortcut icon" type="image/ico" href="/favicon.ico">
+	<link rel="apple-touch-icon-precomposed" href="/touch-icon-iphone-precomposed.png" />
+	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="/touch-icon-ipad-precomposed.png" />
+	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="/touch-icon-iphone4-precomposed.png" />
+	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="/touch-icon-ipad3-precomposed.png" />
+	<meta name="application-name" content="The Official Microsoft IIS Site"/>
+	<meta name="msapplication-TileColor" content="#474747"/>
+	<meta name="msapplication-TileImage" content='http://i2.iis.net/images/iis_tile.png?cdn_id=2014-01-17-002'/>
+  
+  <link href='http://i2.iis.net/umbraco-beta-css/learn.min.css?cdn_id=2014-01-17-002' rel="stylesheet" type="text/css" media="all" />   
+
+  </head>
+  <body class=''>
+    
+    <header id="header-site" class='full-width '>
+    <script type="text/javascript">var currentUsername = '';</script><ul id="nav-user"><li><a href="http://login.iis.net/login/signin.aspx?ReturnUrl=http://www.iis.net/learn/publish/using-the-ftp-service/creating-a-new-ftp-site-in-iis-7">Sign In</a></li><li><a href="http://login.iis.net/login/createuser.aspx?ReturnUrl=http://www.iis.net/learn/publish/using-the-ftp-service/creating-a-new-ftp-site-in-iis-7">Join</a></li></ul>
+    <p id="search-site"><input type="text" name="search" id="txt-search" placeholder="Search all of IIS.NET" /><button type="submit" id="btn-search-submit"><span class="icon icon-search">Search</span></button></p><nav id="nav-primary"><a id="logo" href="http://www.iis.net/home">IIS</a><ul><li><a href="http://www.iis.net/home">Home</a></li><li><a href="http://www.iis.net/downloads">
+        Downloads
+      </a></li><li><a href="http://www.iis.net/learn" class="current">
+        Learn
+    </a><ul><li><a href="/learn/get-started">Get Started</a></li> <li><a href="/learn/install">Install</a></li> <li><a href="/learn/manage">Manage</a></li> <li><a href="/learn/develop">Develop</a></li> <li><a href="/learn/publish" class="current">Publish</a></li> <li><a href="/learn/troubleshoot">Troubleshoot</a></li> <li><a href="/learn/extensions">Extensions</a></li> <li><a href="/learn/media">Media</a></li> <li><a href="/learn/application-frameworks">Application Frameworks</a></li> <li><a href="/learn/web-hosting">Web Hosting</a></li>  </ul></li><li><a href="http://www.iis.net/configreference">
+        Reference
+      </a></li>
+	<li id="solutions-menu"><a href="javascript:;">Solutions</a> 
+					<div>
+                        <ul>
+                            <li>Technologies</li>
+                            <li><a href="http://msdn.microsoft.com/en-us/netframework/default.aspx">.NET Framework</a></li>
+                            <li><a href="http://www.asp.net">ASP.NET</a></li>
+                            <li><a href="http://php.iis.net/">PHP</a></li>
+                            <li><a href="http://www.iis.net/media">Media</a></li>
+                            <li><a href="http://www.microsoft.com/windowsserver2008/en/us/default.aspx">Windows Server</a></li>
+                            <li><a href="http://www.microsoft.com/SQL/default.mspx">SQL Server</a></li>
+                            <li><a href="http://www.microsoft.com/web/gallery">Web App Gallery</a></li>
+                            <li><a href="http://www.windowsazure.com">Windows Azure</a></li>
+                        </ul>
+                        <ul>
+                            <li>Tools</li>
+                            <li><a href="http://www.microsoft.com/visualstudio">Visual Studio</a></li>
+                            <li><a href="http://www.microsoft.com/expression/">Expression Studio</a></li>
+                            <li><a href="http://www.microsoft.com/ie/">Windows Internet Explorer</a></li>
+                            <li><a href="http://www.microsoft.com/web/webmatrix/">WebMatrix</a></li>
+                            <li><a href="http://www.microsoft.com/web/downloads/platform.aspx">Web Platform Installer</a></li>
+                        </ul>
+						<ul>
+							<li>Get Help:</li>
+							<li><a href="http://forums.iis.net/">Ask a Question in our Forums</a></li>
+							<li><a href="http://www.iis.net/feedback">More Help Resources</a></li>
+						</ul>
+					</div>
+				</li>
+	<li><a href="http://blogs.iis.net/">Blogs</a></li><li class="last-child"><a href="http://forums.iis.net/">Forums</a></li></ul></nav>
+  </header>
+  <div class="full-width">
+    
+  <nav id="breadcrumb"><p><a href="/home">Home</a><a href="/learn">Learn</a><a href="/learn/publish">Publish</a><a href="/learn/publish/using-the-ftp-service">Chapter 5.
+    Using the FTP Service</a><span>Creating a New FTP Site in IIS 7</span></p></nav>
+  <div class="page two-right">    
+    <input type="hidden" id="loggedIn" value="False" />
+    <section class="col-article">
+      <article><header><h1>Creating a New FTP Site in IIS 7 <span></span></h1><p>By <a href="#author-info">Robert McMurray</a></p><p>January 15, 2008</p></header><h2>Compatibility</h2>
+<table>
+<tbody>
+<tr>
+<th>Version</th>
+<th>Notes</th></tr>
+<tr>
+<th>IIS 7.5</th>
+<td>The FTP 7.5 service ships as a feature for IIS 7.5 in Windows 7 and Windows Server 2008 R2.</td></tr>
+<tr>
+<th>IIS 7.0</th>
+<td>The FTP 7.0 and FTP 7.5 services were shipped out-of-band for IIS 7.0, which required downloading and installing the service from the following URL: <a href="/download/FTP">http://www.iis.net/download/FTP</a>.</td></tr></tbody></table>
+<h2><a title="00" name="00"></a>Introduction</h2>
+<p>Microsoft has updated the FTP service for Windows Server® 2008 and above. This updated FTP service incorporates many new features that enable Web authors to publish content better than before, and offers Web administrators more security and deployment options.</p>
+<p>This document walks you through creating FTP sites from scratch using the new FTP user interface and by directly editing the IIS configuration files. It contains:</p>
+<ul>
+<li><a href="/learn/publish/using-the-ftp-service/creating-a-new-ftp-site-in-iis-7#01" mce_href="/learn/publish/using-the-ftp-service/creating-a-new-ftp-site-in-iis-7#01">Creating a New FTP Site Using the IIS Manager</a></li>
+<li><a href="/learn/publish/using-the-ftp-service/creating-a-new-ftp-site-in-iis-7#02" mce_href="/learn/publish/using-the-ftp-service/creating-a-new-ftp-site-in-iis-7#02">Creating a New FTP Site by Editing the IIS Configuration Files</a></li></ul>
+<p><b>Note</b>: This walk-through contains a series of steps in which you log in to your FTP site using the local administrator account. These steps should only be followed on the server itself using the loopback address or over SSL from a remote server. If you prefer to use a separate user account instead of the administrator account, you will need to create the appropriate folders and set the correct permissions for that user account when necessary.</p>
+<h3>Prerequisites</h3>
+<p>The following items are required to complete the procedures in this article:</p>
+<ol>
+<li>IIS must be installed on your Windows 2008 Server, and the Internet Information Services Manager must be installed.</li>
+<li>The new FTP service must be installed. You can download and install the FTP service from the <a href="/" mce_href="/">http://www.iis.net/</a> Web site using one of the following links: 
+<ul>
+<li><a href="http://go.microsoft.com/fwlink/?LinkID=143197" mce_href="http://go.microsoft.com/fwlink/?LinkID=143197">FTP 7.5 for IIS 7 (x64)</a></li>
+<li><a href="http://go.microsoft.com/fwlink/?LinkID=143196" mce_href="http://go.microsoft.com/fwlink/?LinkID=143196">FTP 7.5 for IIS 7 (x86)</a></li></ul></li>
+<li>You must create a root folder for FTP publishing.</li></ol>
+<h2><a title="01" name="01"></a>Creating a New FTP Site Using IIS Manager</h2>
+<p>The new FTP service makes it easy to create new FTP sites by providing you with a wizard that walks you through all of the required steps to create a new FTP site from scratch.</p>
+<h3>Step 1: Use the FTP Site Wizard to Create an FTP Site</h3>
+<p>In this first step you will create a new FTP site that anonymous users can open.</p>
+<p><b>Note</b>: The settings listed in this walkthrough specify "%SYSTEMDRIVE%\inetpub\ftproot" as the path to your FTP site. You are not required to use this path; however, if you change the location for your site you will have to change the site-related paths that are used throughout this walkthrough.</p>
+<ol>
+<li>Open IIS Manager. In the <b>Connections</b> pane, click the <b>Sites</b> node in the tree.</li>
+<li>As shown in the image below, right-click the <b>Sites</b> node in the tree and click <b>Add FTP Site</b>, or click <b>Add FTP Site</b> in the <b>Actions</b> pane. 
+<ul>
+<li>Create a folder at "%SystemDrive%\inetpub\ftproot"</li>
+<li>Set the permissions to allow anonymous access: 
+<ol>
+<li>Open a command prompt.</li>
+<li>Type the following command:<pre>ICACLS "%SystemDrive%\inetpub\ftproot" /Grant IUSR:R /T</pre></li>
+<li>Close the command prompt.</li></ol></li></ul><a href="http://i3.iis.net/media/7182277/creating-a-new-ftp-site-in-iis-7-301-Adding FTP to a Web Site - Figure 1.jpg?cdn_id=2014-01-17-002" mce_href="http://i3.iis.net/media/7182277/creating-a-new-ftp-site-in-iis-7-301-Adding FTP to a Web Site - Figure 1.jpg?cdn_id=2014-01-17-002"><img border="0" alt="" src="http://i3.iis.net/media/7182277/creating-a-new-ftp-site-in-iis-7-301-Adding FTP to a Web Site - Figure 1.jpg?cdn_id=2014-01-17-002" mce_src="http://i3.iis.net/media/7182277/creating-a-new-ftp-site-in-iis-7-301-Adding FTP to a Web Site - Figure 1.jpg?cdn_id=2014-01-17-002"></a></li>
+<li>When the <b>Add FTP Site</b> wizard appears: 
+<ul>
+<li>Enter "My New FTP Site" in the <b>FTP site name</b> box, then navigate to the %SystemDrive%\inetpub\ftproot folder that you created in the Prerequisites section. Note that if you choose to type in the path to your content folder, you can use environment variables in your paths.</li>
+<li>When you have completed these items, click <b>Next</b>.</li></ul><a href="http://i3.iis.net/media/7182271/creating-a-new-ftp-site-in-iis-7-301-Adding FTP to a Web Site - Figure 2.jpg?cdn_id=2014-01-17-002" mce_href="http://i3.iis.net/media/7182271/creating-a-new-ftp-site-in-iis-7-301-Adding FTP to a Web Site - Figure 2.jpg?cdn_id=2014-01-17-002"><img border="0" alt="" src="http://i3.iis.net/media/7182271/creating-a-new-ftp-site-in-iis-7-301-Adding FTP to a Web Site - Figure 2.jpg?cdn_id=2014-01-17-002" mce_src="http://i3.iis.net/media/7182271/creating-a-new-ftp-site-in-iis-7-301-Adding FTP to a Web Site - Figure 2.jpg?cdn_id=2014-01-17-002"></a></li>
+<li>On the next page of the wizard: 
+<ul>
+<li>Choose an IP address for your FTP site from the <b>IP Address</b> drop-down, or choose to accept the default selection of "All Unassigned." Because you will be using the administrator account later in this walk-through, you must ensure that you restrict access to the server and enter the local loopback IP address for your computer by typing "127.0.0.1" in the <b>IP Address</b> box. (<strong>Note</strong>: If you are using IPv6, you should also add the IPv6 localhost binding of "::1".)</li>
+<li>Enter the TCP/IP port for the FTP site in the <b>Port</b> box. For this walk-through, choose to accept the default port of 21.</li>
+<li>For this walk- through, do not use a host name, so make sure that the <b>Virtual Host</b> box is blank.</li>
+<li>Make sure that the <b>Certificates</b> drop-down is set to "Not Selected" and that the <b>Allow SSL</b> option is selected.</li>
+<li>When you have completed these items, click <b>Next</b>.</li></ul><a href="http://i2.iis.net/media/7182265/creating-a-new-ftp-site-in-iis-7-301-Adding FTP to a Web Site - Figure 3.jpg?cdn_id=2014-01-17-002" mce_href="http://i2.iis.net/media/7182265/creating-a-new-ftp-site-in-iis-7-301-Adding FTP to a Web Site - Figure 3.jpg?cdn_id=2014-01-17-002"></a><a href="http://i3.iis.net/media/7182313/creating-a-new-ftp-site-in-iis-7-301-2.jpg?cdn_id=2014-01-17-002"><img border="0" alt="" src="http://i3.iis.net/media/7182313/creating-a-new-ftp-site-in-iis-7-301-2.jpg?cdn_id=2014-01-17-002"></a></li>
+<li>On the next page of the wizard: 
+<ul>
+<li>Select <b>Anonymous</b> for the <b>Authentication</b> settings.</li>
+<li>For the <b>Authorization</b> settings, choose "Anonymous users" from the <b>Allow access to</b> drop-down, and select <b>Read</b> for the <b>Permissions</b> option.</li>
+<li>When you have completed these items, click <b>Finish</b>.</li></ul><a href="http://i1.iis.net/media/7182259/creating-a-new-ftp-site-in-iis-7-301-Adding FTP to a Web Site - Figure 4.jpg?cdn_id=2014-01-17-002" mce_href="http://i1.iis.net/media/7182259/creating-a-new-ftp-site-in-iis-7-301-Adding FTP to a Web Site - Figure 4.jpg?cdn_id=2014-01-17-002"><img border="0" alt="" src="http://i1.iis.net/media/7182259/creating-a-new-ftp-site-in-iis-7-301-Adding FTP to a Web Site - Figure 4.jpg?cdn_id=2014-01-17-002" mce_src="http://i1.iis.net/media/7182259/creating-a-new-ftp-site-in-iis-7-301-Adding FTP to a Web Site - Figure 4.jpg?cdn_id=2014-01-17-002"></a></li></ol>
+<h4>Summary</h4>
+<p>You have successfully created a new FTP site using the new FTP service. To recap the items that you completed in this step:</p>
+<ol>
+<li>You created a new FTP site named "My New FTP Site", with the site's content root at "%SystemDrive%\inetpub\ftproot".</li>
+<li>You bound the FTP site to the local loopback address for your computer on port 21, and you chose not to use Secure Sockets Layer (SSL) for the FTP site.</li>
+<li>You created a default rule for the FTP site to allow anonymous users "Read" access to the files.</li></ol>
+<h3>Step 2: Adding Additional FTP Security Settings</h3>
+<p>Creating a new FTP site that anonymous users can browse is useful for public download sites, but web authoring is equally important. In this step, you add additional authentication and authorization settings for the administrator account. To do so, follow these steps:</p>
+<ol>
+<li>In IIS Manager, click the node for the FTP site that you created earlier, then double-click <b>FTP Authentication</b> to open the FTP authentication feature page.<br><a href="http://i1.iis.net/media/7182307/creating-a-new-ftp-site-in-iis-7-301-file5.png?cdn_id=2014-01-17-002" mce_href="http://i1.iis.net/media/7182307/creating-a-new-ftp-site-in-iis-7-301-file5.png?cdn_id=2014-01-17-002"><img border="0" alt="" src="http://i1.iis.net/media/7182307/creating-a-new-ftp-site-in-iis-7-301-file5.png?cdn_id=2014-01-17-002" mce_src="http://i1.iis.net/media/7182307/creating-a-new-ftp-site-in-iis-7-301-file5.png?cdn_id=2014-01-17-002"></a></li>
+<li>When the <b>FTP Authentication</b> page displays, highlight <b>Basic Authentication</b> and then click <b>Enable</b> in the <b>Actions</b> pane.<br><a href="http://i3.iis.net/media/7182301/creating-a-new-ftp-site-in-iis-7-301-file6.png?cdn_id=2014-01-17-002" mce_href="http://i3.iis.net/media/7182301/creating-a-new-ftp-site-in-iis-7-301-file6.png?cdn_id=2014-01-17-002"><img border="0" alt="" src="http://i3.iis.net/media/7182301/creating-a-new-ftp-site-in-iis-7-301-file6.png?cdn_id=2014-01-17-002" mce_src="http://i3.iis.net/media/7182301/creating-a-new-ftp-site-in-iis-7-301-file6.png?cdn_id=2014-01-17-002"></a></li>
+<li>In IIS Manager, click the node for the FTP site to re-display the icons for all of the FTP features.</li>
+<li>You must add an authorization rule so that the administrator can log in. To do so, double-click the <b>FTP Authorization Rules</b> icon to open the FTP authorization rules feature page.<br><a href="http://i2.iis.net/media/7182295/creating-a-new-ftp-site-in-iis-7-301-file7.png?cdn_id=2014-01-17-002" mce_href="http://i2.iis.net/media/7182295/creating-a-new-ftp-site-in-iis-7-301-file7.png?cdn_id=2014-01-17-002"><img border="0" alt="" src="http://i2.iis.net/media/7182295/creating-a-new-ftp-site-in-iis-7-301-file7.png?cdn_id=2014-01-17-002" mce_src="http://i2.iis.net/media/7182295/creating-a-new-ftp-site-in-iis-7-301-file7.png?cdn_id=2014-01-17-002"></a></li>
+<li>When the <b>FTP Authorization Rules</b> page is displayed, click <b>Add Allow Rule</b> in the <b>Actions</b> pane.<br><a href="http://i1.iis.net/media/7182289/creating-a-new-ftp-site-in-iis-7-301-file8.png?cdn_id=2014-01-17-002" mce_href="http://i1.iis.net/media/7182289/creating-a-new-ftp-site-in-iis-7-301-file8.png?cdn_id=2014-01-17-002"><img border="0" alt="" src="http://i1.iis.net/media/7182289/creating-a-new-ftp-site-in-iis-7-301-file8.png?cdn_id=2014-01-17-002" mce_src="http://i1.iis.net/media/7182289/creating-a-new-ftp-site-in-iis-7-301-file8.png?cdn_id=2014-01-17-002"></a></li>
+<li>When the <b>Add Allow Authorization Rule</b> dialog box displays: 
+<ul>
+<li>Select <b>Specified users</b>, then type "administrator" in the box.</li>
+<li>For <b>Permissions</b>, select both <b>Read</b> and <b>Write</b>.</li>
+<li>When you have completed these items, click <b>OK</b>.<br><a href="http://i3.iis.net/media/7182283/creating-a-new-ftp-site-in-iis-7-301-file9.png?cdn_id=2014-01-17-002" mce_href="http://i3.iis.net/media/7182283/creating-a-new-ftp-site-in-iis-7-301-file9.png?cdn_id=2014-01-17-002"><img border="0" alt="" src="http://i3.iis.net/media/7182283/creating-a-new-ftp-site-in-iis-7-301-file9.png?cdn_id=2014-01-17-002" mce_src="http://i3.iis.net/media/7182283/creating-a-new-ftp-site-in-iis-7-301-file9.png?cdn_id=2014-01-17-002"></a></li></ul></li></ol>
+<h4>Summary</h4>
+<p>To recap the items that you completed in this step:</p>
+<ol>
+<li>You added Basic authentication to the FTP site.</li>
+<li>You added an authorization rule that allows the administrator account both "Read" and "Write" permissions for the FTP site.</li></ol>
+<h3>Step 3: Logging in to Your FTP Site</h3>
+<p>In Step 1, you created an FTP site that anonymous users can access, and in Step 2 you added additional security settings that allow an administrator to log in. In this step, you log in anonymously using your administrator account.</p>
+<p><b>Note</b>: In this step log in to your FTP site using the local administrator account. When creating the FTP site in Step 1 you bound the FTP site to the local loopback IP address. If you did not use the local loopback address, use SSL to protect your account settings. If you prefer to use a separate user account instead of the administrator account, set the correct permissions for that user account for the appropriate folders.</p>
+<h4>Logging in to your FTP site anonymously</h4>
+<ol>
+<li>On your FTP server, open a command prompt session.</li>
+<li>Type the following command to connect to your FTP server: 
+<p><kbd>FTP localhost</kbd></p> </li>
+<li>When prompted for a user name, enter "anonymous".</li>
+<li>When prompted for a password, enter your email address.</li></ol>
+<p>You should now be logged in to your FTP site anonymously. Based on the authorization rule that you added in Step 1, you should only have Read access to the content folder.</p>
+<h4>Logging in to your FTP site using your administrator account</h4>
+<ol>
+<li>On your FTP server, open a command prompt session.</li>
+<li>Type the following command to connect to your FTP server: 
+<p><kbd>FTP localhost</kbd></p> </li>
+<li>When prompted for a user name, enter "administrator".</li>
+<li>When prompted for a password, enter your administrator password.</li></ol>
+<p>You should now be logged in to your FTP site as the local administrator. Based on the authorization rule that you added in Step 2 you should have both Read and Write access to the content folder.</p>
+<h4>Summary</h4>
+<p>To recap the items that you completed in this step:</p>
+<ol>
+<li>You logged in to your FTP site anonymously.</li>
+<li>You logged in to your FTP site as the local administrator.</li></ol>
+<h2><a title="02" name="02"></a>Creating a New FTP Site by Editing the IIS Configuration Files</h2>
+<p>You can also create FTP sites for the new FTP service by editing the IIS configuration files.</p>
+<p><strong>Note</strong>: Editing your ApplicationHost.config file requires full administrative permissions. This is best accomplished using one of two methods: </p>
+<ul>
+<li>Log in to your computer using the local "administrator" account. 
+<li>If you are logged in using an account with administrative permissions that is not the local "administrator" account, open Notepad using the "Run as Administrator" option.</li></li></ul>
+<p><strong>Note</strong>: The above steps are required because the User Account Control (UAC) security component in the Windows Vista and Windows Server 2008 operating systems prevent access to your ApplicationHost.config file. For more information about UAC, please see the following documentation: </p>
+<p><a href="http://go.microsoft.com/fwlink/?LinkID=113664" target="_blank" mce_href="http://go.microsoft.com/fwlink/?LinkID=113664">http://go.microsoft.com/fwlink/?LinkID=113664</a></p>
+<p> The following steps walk you through all of the required settings to create a new FTP site from scratch.</p>
+<ol>
+<li>Using a text editor such as Windows Notepad, open your ApplicationHost.config file, which is located in your %SystemRoot%\System32\inetsrv\config folder by default.</li>
+<li>Locate the &lt;sites&gt; section. This section contains your Default Web Site and should begin with something like the following:<br><samp>&lt;sites&gt;<br>  &lt;site name="Default Web Site" id="1"&gt;<br>     &lt;application path="/"&gt;<br>        &lt;virtualDirectory path="/" physicalPath="%SystemDrive%\inetpub\wwwroot" /&gt;<br>     &lt;/application&gt;<br>     &lt;bindings&gt;<br>        &lt;binding protocol="http" bindingInformation="*:80:" /&gt;<br>     &lt;/bindings&gt;<br>  &lt;/site&gt;</samp></li>
+<li>Copy the entire section for the Default Web Site and paste it on a new line just below the closing &lt;/site&gt; tag.</li>
+<li>Change the site's settings to create a unique FTP site: 
+<ul>
+<li>Modify the <b>name</b> and <b>id</b> attributes for the new site to respectively contain "Default FTP Site" and "2".<br><b>Note</b>: You may need to choose a different number than "2" for the site ID if any site is currently using that site identifier.</li>
+<li>Change the value of the <b>protocol</b> attribute on the binding element to contain "ftp".</li>
+<li>Change the <b>physicalPath</b> attribute to "%SystemDrive%\inetpub\ftproot".</li>
+<li>Change the <b>port</b> value of the <b>bindingInformation</b> attribute to contain "21".</li></ul></li>
+<li>Add an &lt;ftpServer&gt; section beneath the closing bindings tag that will contain your authentication settings.<br><samp>&lt;ftpServer&gt;<br>  &lt;security&gt;<br>     &lt;authentication&gt;<br>         &lt;anonymousAuthentication enabled="true" userName="IUSR" /&gt;<br>         &lt;basicAuthentication enabled="true" /&gt;<br>     &lt;/authentication&gt;<br>     &lt;ssl controlChannelPolicy="SslAllow" dataChannelPolicy="SslAllow" /&gt;<br>  &lt;/security&gt;<br>&lt;/ftpServer&gt;</samp><br><b>Note</b>: The authentication settings for FTP sites are configured at the site-level, unlike authentication for Web sites, which can be configured per URL.<br><br>Your &lt;sites&gt; section should now contain something similar to the following example:<br><samp>&lt;sites&gt;<br>   &lt;site name="Default Web Site" id="1"&gt;<br>      &lt;application path="/"&gt;<br>         &lt;virtualDirectory path="/" physicalPath="%SystemDrive%\inetpub\wwwroot" /&gt;<br>      &lt;/application&gt;<br>      &lt;bindings&gt;<br>         &lt;binding protocol="http" bindingInformation="*:80:" /&gt;<br>      &lt;/bindings&gt;<br>   &lt;/site&gt;<br>   &lt;site name="Default FTP Site" id="2"&gt;<br>      &lt;application path="/"&gt;<br>         &lt;virtualDirectory path="/" physicalPath="%SystemDrive%\inetpub\ftproot" /&gt;<br>      &lt;/application&gt;<br>      &lt;bindings&gt;<br>         &lt;binding protocol="ftp" bindingInformation="*:21:" /&gt;<br>      &lt;/bindings&gt;<br>      &lt;ftpServer&gt;<br>         &lt;security&gt;<br>            &lt;authentication&gt;<br>               &lt;anonymousAuthentication enabled="true" userName="IUSR" /&gt;<br>               &lt;basicAuthentication enabled="true" /&gt;<br>            &lt;/authentication&gt;<br>            &lt;ssl controlChannelPolicy="SslAllow" dataChannelPolicy="SslAllow" /&gt;<br>         &lt;/security&gt;<br>      &lt;/ftpServer&gt;<br>   &lt;/site&gt;</samp></li>
+<li>Scroll to the bottom of your ApplicationHost.config file and add a location section for your Default FTP Site that will contain your authorization settings.<br><samp>&lt;location path="Your FTP Site Name"&gt;<br>   &lt;system.ftpServer&gt;<br>       &lt;security&gt;<br>           &lt;authorization&gt;<br>               &lt;add accessType="Allow" users="*" permissions="Read" /&gt;<br>               &lt;add accessType="Allow" users="administrator" permissions="Read, Write" /&gt;<br>           &lt;/authorization&gt;<br>       &lt;/security&gt;<br>   &lt;/system.ftpServer&gt;<br>&lt;/location&gt;</samp><br><b>Note</b>: In this example, the authorization settings for FTP sites are configured per URL, and these settings specifically enable Read permissions for all users, and Read/Write permissions for the administrator account.</li>
+<li>Save your ApplicationHost.config file.</li></ol>
+<p>You should now be able to log in to your newly created FTP site using an FTP client. To use Internet Explorer anonymously on your IIS server, enter ftp://localhost in the Internet Explorer address bar. You should be logged in and see your files anonymously; you should not be prompted for user credentials.</p>
+<h3>Summary</h3>
+<p>In this task you created an FTP site by editing the IIS configuration files. To recap the items that you completed in this step:</p>
+<ol>
+<li>You created a new FTP site by using the Default Web Site's settings as a template.</li>
+<li>You configured the following authorization rules for the FTP site: 
+<ul>
+<li>All users have Read permissions.</li>
+<li>The administrator account had Read/Write permissions.</li></ul></li></ol><br><br><a href="http://forums.iis.net/1045.aspx" class="btn">Discuss in IIS Forums</a><aside id="author-info" class="about-author"><h1>By Robert McMurray</h1><p><img src="http://i3.iis.net/media/6718269/robmcm.jpg?cdn_id=2014-01-17-002" alt="Robert McMurray"/>Robert McMurray is a Technical Writer at Microsoft. Robert has been with Microsoft for 17 years, where he worked in Technical Support for IIS 1.0 through IIS 5.0, and as a Technical Writer for IIS 6.0 and IIS 7.0. Robert was a Program Manager on the IIS Product Team for IIS 7.0, IIS 7.5, and IIS 8.0, where he was responsible for IIS Express, URL Rewrite, and the Web Publishing technologies (FTP, WebDAV, FPSE).</p></aside></article>
+    </section>
+    <section class="col-right">
+      <div id="FeaturedAd" data-adzoneid="12693" data-adtypeid="5" class="ad-300x250 " data-adwidth="300px" data-adheight="250px" style="width:300px;height:250px;"></div>     
+      <nav class="nav-base nav-iconed"><h1>Table of Contents</h1><h2>Deploying Application Packages</h2><ul><li><a href="/learn/publish/deploying-application-packages/taking-an-application-offline-before-publishing"><span><span class="icon icon-article">Article</span></span>Taking an Application Offline before Publishing</a></li><li><a href="/learn/publish/deploying-application-packages/videocast-simplified-application-deployment-on-the-microsoft-web-platform"><span><span class="icon icon-article">Article</span></span>Videocast: Simplified Application Deployment on the Microsoft Web Platform</a></li><li><a href="/learn/publish/deploying-application-packages/provision-an-iis-web-site-in-a-hosting-environment"><span><span class="icon icon-article">Article</span></span>Provision an IIS Web Site in a Hosting Environment</a></li><li><a href="/learn/publish/deploying-application-packages/dotnetnuke"><span><span class="icon icon-article">Article</span></span>DotNetNuke</a></li><li><a href="/learn/publish/deploying-application-packages/screwturn-wiki"><span><span class="icon icon-article">Article</span></span>ScrewTurn Wiki</a></li><li><a href="/learn/publish/deploying-application-packages/blogenginenet"><span><span class="icon icon-article">Article</span></span>BlogEngine.NET</a></li><li><a href="/learn/publish/deploying-application-packages/umbraco"><span><span class="icon icon-article">Article</span></span>Umbraco</a></li><li><a href="/learn/publish/deploying-application-packages/deploying-wordpress-via-packages-in-a-hosting-environment"><span><span class="icon icon-article">Article</span></span>Deploying WordPress via Packages in a Hosting Environment</a></li><li><a href="/learn/publish/deploying-application-packages/deploying-joomla-via-packages-in-a-hosting-environment"><span><span class="icon icon-article">Article</span></span>Deploying Joomla! via Packages in a Hosting Environment</a></li><li><a href="/learn/publish/deploying-application-packages/deploying-drupal-via-packages-in-a-hosting-environment"><span><span class="icon icon-article">Article</span></span>Deploying Drupal via Packages in a Hosting Environment</a></li></ul><h2>Using Web Deploy</h2><ul><li><a href="/learn/publish/using-web-deploy/packaging-and-restoring-a-web-site"><span><span class="icon icon-article">Article</span></span>Packaging and Restoring a Web site</a></li><li><a href="/learn/publish/using-web-deploy/using-custom-manifests"><span><span class="icon icon-article">Article</span></span>Using Custom Manifests</a></li><li><a href="/learn/publish/using-web-deploy/viewing-web-site-dependencies"><span><span class="icon icon-article">Article</span></span>Viewing Web Site Dependencies</a></li><li><a href="/learn/publish/using-web-deploy/migrate-a-web-site-from-iis-60-to-iis-7-or-above"><span><span class="icon icon-article">Article</span></span>Migrate a Web Site from IIS 6.0 to IIS 7 or above</a></li><li><a href="/learn/publish/using-web-deploy/synchronize-iis-60-web-sites"><span><span class="icon icon-article">Article</span></span>Synchronize IIS 6.0 Web Sites</a></li><li><a href="/learn/publish/using-web-deploy/synchronize-iis"><span><span class="icon icon-article">Article</span></span>Synchronize IIS</a></li><li><a href="/learn/publish/using-web-deploy/synchronizing-two-iis-servers-with-php"><span><span class="icon icon-article">Article</span></span>Synchronizing Two IIS Servers with PHP</a></li><li><a href="/learn/publish/using-web-deploy/export-a-package-through-iis-manager"><span><span class="icon icon-article">Article</span></span>Export a Package through IIS Manager</a></li><li><a href="/learn/publish/using-web-deploy/import-a-package-through-iis-manager"><span><span class="icon icon-article">Article</span></span>Import a Package through IIS Manager</a></li><li><a href="/learn/publish/using-web-deploy/configure-the-web-deployment-handler"><span><span class="icon icon-article">Article</span></span>Configure the Web Deployment Handler</a></li><li><a href="/learn/publish/using-web-deploy/using-web-deploy-for-web-farms"><span><span class="icon icon-article">Article</span></span>Using Web Deploy for Web Farms</a></li><li><a href="/learn/publish/using-web-deploy/use-the-web-deployment-tool"><span><span class="icon icon-article">Article</span></span>Use the Web Deployment Tool</a></li><li><a href="/learn/publish/using-web-deploy/microsoft-web-deploy-v2-readme"><span><span class="icon icon-article">Article</span></span>Microsoft Web Deploy v2: Readme</a></li><li><a href="/learn/publish/using-web-deploy/introduction-to-web-deploy"><span><span class="icon icon-article">Article</span></span>Introduction to Web Deploy</a></li><li><a href="/learn/publish/using-web-deploy/powershell-scripts-for-automating-web-deploy-setup"><span><span class="icon icon-article">Article</span></span>PowerShell scripts for automating Web Deploy setup</a></li><li><a href="/learn/publish/using-web-deploy/testing-web-deploy-publishing-from-visual-studio-2010-and-webmatrix"><span><span class="icon icon-article">Article</span></span>Testing Web Deploy publishing from Visual Studio 2010 and WebMatrix</a></li><li><a href="/learn/publish/using-web-deploy/building-a-web-deploy-package-from-visual-studio-2010"><span><span class="icon icon-article">Article</span></span>Building a Web Deploy Package from Visual Studio 2010</a></li><li><a href="/learn/publish/using-web-deploy/web-deploy-parameterization"><span><span class="icon icon-article">Article</span></span>Web Deploy Parameterization</a></li><li><a href="/learn/publish/using-web-deploy/microsoft-web-deploy-v3-readme"><span><span class="icon icon-article">Article</span></span>Microsoft Web Deploy v3 Readme</a></li><li><a href="/learn/publish/using-web-deploy/web-deploy-automatic-backups"><span><span class="icon icon-article">Article</span></span>Web Deploy Automatic Backups</a></li><li><a href="/learn/publish/using-web-deploy/web-deploy-powershell-cmdlets"><span><span class="icon icon-article">Article</span></span>Web Deploy PowerShell Cmdlets</a></li><li><a href="/learn/publish/using-web-deploy/changing-authentication-mode-for-a-given-website"><span><span class="icon icon-article">Article</span></span>Changing authentication mode for a given website</a></li><li><a href="/learn/publish/using-web-deploy/parameterization-improvements-in-web-deploy-v3"><span><span class="icon icon-article">Article</span></span>Parameterization improvements in Web Deploy V3</a></li><li><a href="/learn/publish/using-web-deploy/dbdacfx-provider-for-incremental-database-publishing"><span><span class="icon icon-article">Article</span></span>dbDacFx Provider for Incremental Database publishing</a></li></ul><h2>Troubleshooting Web Deploy</h2><ul><li><a href="/learn/publish/troubleshooting-web-deploy/troubleshooting-web-deploy"><span><span class="icon icon-article">Article</span></span>Troubleshooting Web Deploy</a></li><li><a href="/learn/publish/troubleshooting-web-deploy/web-deploy-error-codes"><span><span class="icon icon-article">Article</span></span>Web Deploy error codes</a></li><li><a href="/learn/publish/troubleshooting-web-deploy/troubleshooting-common-problems-with-web-deploy"><span><span class="icon icon-article">Article</span></span>Troubleshooting Common Problems with Web Deploy</a></li><li><a href="/learn/publish/troubleshooting-web-deploy/troubleshooting-web-deploy-problems-with-visual-studio"><span><span class="icon icon-article">Article</span></span>Troubleshooting Web Deploy problems with Visual Studio</a></li></ul><h2>Using WebDAV</h2><ul><li><a href="/learn/publish/using-webdav/webdav-extension-video-walkthrough"><span><span class="icon icon-video">Video</span></span>WebDAV Extension - Video Walkthrough</a></li><li><a href="/learn/publish/using-webdav/how-to-use-custom-properties-with-webdav"><span><span class="icon icon-article">Article</span></span>How to Use Custom Properties With WebDAV</a></li><li><a href="/learn/publish/using-webdav/how-to-configure-webdav-settings-using-appcmd"><span><span class="icon icon-article">Article</span></span>How to Configure WebDAV Settings Using AppCmd</a></li><li><a href="/learn/publish/using-webdav/how-to-configure-webdav-with-request-filtering"><span><span class="icon icon-article">Article</span></span>How to Configure WebDAV with Request Filtering</a></li><li><a href="/learn/publish/using-webdav/how-to-migrate-fpse-sites-to-webdav"><span><span class="icon icon-article">Article</span></span>How to Migrate FPSE Sites to WebDAV</a></li><li><a href="/learn/publish/using-webdav/using-the-webdav-redirector"><span><span class="icon icon-article">Article</span></span>Using the WebDAV Redirector</a></li><li><a href="/learn/publish/using-webdav/how-to-use-webdav-locks"><span><span class="icon icon-article">Article</span></span>How to Use WebDAV Locks</a></li></ul><h2>Using the FTP Service</h2><ul><li><a href="/learn/publish/using-the-ftp-service/ftp-extension-video-walkthrough"><span><span class="icon icon-video">Video</span></span>FTP Extension - Video Walkthrough</a></li><li class="current"><a href="/learn/publish/using-the-ftp-service/creating-a-new-ftp-site-in-iis-7"><span><span class="icon icon-article">Article</span></span>Creating a New FTP Site in IIS 7</a></li><li><a href="/learn/publish/using-the-ftp-service/adding-ftp-publishing-to-a-web-site-in-iis-7"><span><span class="icon icon-article">Article</span></span>Adding FTP Publishing to a Web Site in IIS 7</a></li><li><a href="/learn/publish/using-the-ftp-service/using-ftp-over-ssl-in-iis-7"><span><span class="icon icon-article">Article</span></span>Using FTP Over SSL in IIS 7</a></li><li><a href="/learn/publish/using-the-ftp-service/configuring-ftp-user-isolation-in-iis-7"><span><span class="icon icon-article">Article</span></span>Configuring FTP User Isolation in IIS 7</a></li><li><a href="/learn/publish/using-the-ftp-service/using-fsrm-folder-quotas-with-ftp-in-iis-7"><span><span class="icon icon-article">Article</span></span>Using FSRM Folder Quotas with FTP in IIS 7</a></li><li><a href="/learn/publish/using-the-ftp-service/configuring-ftp-firewall-settings-in-iis-7"><span><span class="icon icon-article">Article</span></span>Configuring FTP Firewall Settings in IIS 7</a></li><li><a href="/learn/publish/using-the-ftp-service/using-ftp-virtual-host-names-in-iis-7"><span><span class="icon icon-article">Article</span></span>Using FTP Virtual Host Names in IIS 7</a></li><li><a href="/learn/publish/using-the-ftp-service/configure-ftp-with-iis-manager-authentication-in-iis-7"><span><span class="icon icon-article">Article</span></span>Configure FTP with IIS Manager Authentication in IIS 7</a></li><li><a href="/learn/publish/using-the-ftp-service/configuring-ftp-with-net-membership-authentication-in-iis-7"><span><span class="icon icon-article">Article</span></span>Configuring FTP with .NET Membership Authentication in IIS 7</a></li><li><a href="/learn/publish/using-the-ftp-service/scenario-build-an-ftp-site-on-iis"><span><span class="icon icon-article">Article</span></span>Scenario: Build an FTP Site on IIS</a></li><li><a href="/learn/publish/using-the-ftp-service/cse-curated-view-ftp-security-settings"><span><span class="icon icon-article">Article</span></span>How Do I Configure FTP Security in IIS?</a></li></ul><h2>FrontPage Server Extensions</h2><ul><li><a href="/learn/publish/frontpage-server-extensions/upgrade-issues-with-frontpage-server-extensions"><span><span class="icon icon-article">Article</span></span>Upgrade Issues with FrontPage Server Extensions</a></li><li><a href="/learn/publish/frontpage-server-extensions/installing-the-frontpage-server-extensions-on-iis"><span><span class="icon icon-article">Article</span></span>Installing the FrontPage Server Extensions on IIS 7</a></li></ul></nav>
+      <p id="MicroTextAd" data-adzoneid="0" data-adtypeid="348" class="ad-text " data-adwidth="100%" data-adheight="40px" style="height:40px;"></p> 
+      <div id="MicrosoftTranslatorWidget"><noscript><a href="http://www.microsofttranslator.com/bv.aspx?a=http%3a%2f%2fwww.iis.net%2f">Translate this page</a><br />Powered by <a href="http://www.microsofttranslator.com">Microsoft® Translator</a></noscript></div> <script type="text/javascript"> /* <![CDATA[ */ setTimeout(function() { var s = document.createElement("script"); s.type = "text/javascript"; s.charset = "UTF-8"; s.src = ((location && location.href && location.href.indexOf('https') == 0) ? "https://ssl.microsofttranslator.com" : "http://www.microsofttranslator.com" ) + "/ajax/v2/widget.aspx?mode=manual&from=en&layout=ts"; var p = document.getElementsByTagName('head')[0] || document.documentElement; p.insertBefore(s, p.firstChild); }, 0); /* ]]> */ </script> 
+    </section>
+  </div>
+  <div id="BottomAd" data-adzoneid="0" data-adtypeid="4" class="ad centered-ad-728" data-adwidth="728px" data-adheight="90px" style="width:728px;height:90px;"></div> 
+
+    <footer id="footer-site">
+	        <ul>
+		        <li class="text-links">This site is managed for Microsoft by Neudesic, LLC. | © 2014 Microsoft. All rights reserved.</li>
+		        <li><a href="http://www.iis.net/privacy">Privacy Statement</a></li>
+		        <li><a href="http://www.iis.net/terms-of-use">Terms of Use</a></li>
+		        <li><a href="http://www.iis.net/contact">Contact Us</a></li>
+		        <li><a href="http://www.neudesicmediagroup.com/Advertising.aspx?site=iis">Advertise With Us</a></li>
+	        </ul>
+	        <ul>
+		        <li>Follow us on:</li>
+		        <li><a href="http://www.twitter.com/inetsrv/">Twitter</a></li>
+		        <li><a href="http://facebook.com/inetsrv/">Facebook</a></li>
+	        </ul>
+	        <ul class="no-title">
+		        <li><a href="http://forums.iis.net/1080.aspx">Feedback on IIS</a></li>
+				<li><a href="http://www.iis.net/learn">Powered by IIS8</a></li>
+	        </ul>
+	        <a href="http://microsoft.com/" class="logo-footer">Microsoft</a>
+        </footer>
+  </div>      
+    
+<input type="hidden" id="meta-contentType" value="ArticleContentPicker" />
+<input type="hidden" id="meta-contentLiveDate" value="2008-01-15" />
+<input type="hidden" id="meta-articleContentType" value="Tutorial" />
+<input type="hidden" id="meta-articleContentTypeValue" value="32" />
+    
+      <script src='http://i2.iis.net/umbraco-beta-scripts/jquery-1.8.2.min.js?cdn_id=2014-01-17-002' type="text/javascript"></script>
+      <script type="text/javascript">$.ajaxSetup({ cache: false });var omni_guid="15938219-2469-44d3-9a67-ee6a32c3d048";var searchDomain='http://www.iis.net';</script>
+      
+    <script type="text/javascript">var s=document.createElement('script');s.type='text/javascript';s.src='http://i2.iis.net/umbraco-beta-scripts/prod-article.min.js?cdn_id=2014-01-17-002';document.body.appendChild(s);</script>
+
+    <noscript><a href="http://www.omniture.com" title="Web Analytics"><img src="http://msstonojstemp.112.2O7.net/b/ss/msstonojstemp/1/H.20.2--NS/0" height="1" width="1" alt="" /></a></noscript>                                        
+  </body>
+</html>  
